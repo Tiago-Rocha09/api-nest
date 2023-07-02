@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model Plan {
+  id          Int       @id @default(autoincrement())
+  name        String?   @db.VarChar(200)
+  description String?   @db.LongText
+  type        String?   @db.VarChar(100)
+  value       Float?    @db.Float
+  logo        String?   @db.LongText
+  status      Int       @default(1)
+  createdAt   DateTime? @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime? @db.Timestamp(0)
+
+  @@map("plans")
+}
+
+model PasswordRecovery {
+  id        BigInt   @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  userId    Int      @map("user_id")
+  code      String   @db.VarChar(200)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+
+  @@map("recupera_senha")
+}
+
+model Order {
+  id            BigInt    @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  userId        Int       @map("user_id")
+  planId        Int       @map("plan_id")
+  transactionId String?   @map("transaction_id") @db.VarChar(200)
+  paymentAmount Float     @map("payment_amount") @db.Float
+  statusText    String    @map("status_text") @db.VarChar(200)
+  status        Int       @map("status")
+  paymentType   String    @map("payment_type") @db.VarChar(100)
+  startDate     DateTime? @map("start_date") @db.Timestamp(0)
+  dueDate       DateTime? @map("due_date") @db.Timestamp(0)
+  updatedAt     DateTime  @default(now()) @map("updated_at") @db.Timestamp(0)
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamp(0)
+
+  @@map("orders")
+}
+
+model User {
+  id              BigInt    @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  googleId        String?   @map("id_google") @db.VarChar(200)
+  cpf             String?   @unique(map: "cpf_unique") @db.VarChar(20)
+  name            String    @db.VarChar(200)
+  email           String?   @unique(map: "email_unique") @db.VarChar(200)
+  phone           String    @map("fone") @db.VarChar(20)
+  birthday        DateTime? @db.Date
+  password        String    @db.VarChar(200)
+  addressCep      String?   @map("address_cep") @db.VarChar(20)
+  addressState    String?   @map("address_state") @db.VarChar(100)
+  addressCity     String?   @map("address_city") @db.VarChar(100)
+  addressDistrict String?   @map("address_district") @db.VarChar(100)
+  addressStreet   String?   @map("address_street") @db.VarChar(100)
+  addressNumber   String?   @map("address_number") @db.VarChar(10)
+  updatedAt       DateTime  @default(now()) @map("updated_at") @db.Timestamp(0)
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamp(0)
+  welcomeMessage  Int       @default(0) @map("mensagemBoasVindas")
+  root            Boolean   @default(false)
+  plan            String    @default("0") @db.VarChar(100)
+  lastAccess      DateTime? @map("last_access") @db.Timestamp(0)
+
+  @@map("users")
+}
