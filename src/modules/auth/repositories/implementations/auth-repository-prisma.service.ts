@@ -9,7 +9,6 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { PasswordService } from 'src/modules/auth/utils/password.service';
 import { DuplicatedFieldException } from 'src/shared/exceptions/duplicated-field.exception';
