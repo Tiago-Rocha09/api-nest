@@ -1,5 +1,10 @@
 export class OrderReponse {
-  purchaseId: number;
+  orderId: number;
   qrCode: string;
   qrCodeUrl: string;
+}
+
+export class OrderStatusReponse {
+  orderId: number;
+  status: number;
 }

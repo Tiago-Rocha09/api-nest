@@ -29,7 +29,7 @@ export class PaymentRepositoryDippi implements PaymentRepository {
         Payment: {
           PayerMessage: 'API Nest',
           Type: 'Pix',
-          Amount: props.total,
+          Amount: Number((props.total * 100).toFixed(0)),
           UrlReturn: `https://webhook.site/494eb771-7c1e-405b-aaa6-4b7d3ce72533`,
           ExpirationTime: 900,
           AdditionalInfo: [
@@ -47,12 +47,16 @@ export class PaymentRepositoryDippi implements PaymentRepository {
 
   async createPixPayment(body: PaymentPix): Promise<FormattedGatewayResponse> {
     const observable = this.httpService
-      .post<GatewayResponse>(this.config.get('DIPPI_API_URL'), body, {
-        headers: {
-          MerchantId: process.env.MPAYS_MERCHANT_ID,
-          MerchantKey: process.env.MPAYS_MERCHANT_KEY,
+      .post<GatewayResponse>(
+        `${this.config.get('DIPPI_API_URL')}/payments/create-immediate`,
+        body,
+        {
+          headers: {
+            MerchantId: this.config.get('DIPPI_MERCHANT_ID'),
+            MerchantKey: this.config.get('DIPPI_MERCHANT_KEY'),
+          },
         },
-      })
+      )
       .pipe(
         map((response) => {
           console.log('then');
@@ -60,7 +64,7 @@ export class PaymentRepositoryDippi implements PaymentRepository {
           if (response?.data) {
             const data = response.data;
             return {
-              id: data.MerchantOrderId,
+              orderId: Number(data.MerchantOrderId),
               paymentStatusDescription: data.PaymentReturnMessage,
               transactionId: data.TransactionId,
               expiresAt: data.PaymentExpirationDateTime,
@@ -69,16 +73,17 @@ export class PaymentRepositoryDippi implements PaymentRepository {
               line: data.PaymentBarCodeNumber,
               createdAt: data.created_at,
               status: data.PaymentStatus,
-              response: response.data,
+              statusCode: response.status,
             };
           }
         }),
         catchError((error) => {
           console.log('catch');
           console.log({ response: error.response });
+          console.log({ responseData: error.response.data });
           const data = error?.response?.data;
           return of({
-            id: data?.MerchantOrderId,
+            orderId: Number(data?.MerchantOrderId),
             paymentStatusDescription: data?.PaymentReturnMessage,
             transactionId: data?.TransactionId,
             expiresAt: data?.PaymentExpirationDateTime,
@@ -87,6 +92,7 @@ export class PaymentRepositoryDippi implements PaymentRepository {
             line: data?.PaymentBarCodeNumber,
             createdAt: data?.created_at,
             status: data?.PaymentStatus,
+            statusCode: error.response.status,
           });
         }),
       );

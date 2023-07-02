@@ -1,5 +1,5 @@
 export class FormattedGatewayResponse {
-  id: string;
+  orderId: number;
   paymentStatusDescription: string;
   transactionId: number;
   expiresAt: string;
@@ -8,6 +8,7 @@ export class FormattedGatewayResponse {
   line: string;
   createdAt: string;
   status: number;
+  statusCode: number;
 }
 
 export class GatewayResponse {
