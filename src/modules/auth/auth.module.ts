@@ -9,6 +9,7 @@ import { AuthTokenJwtService } from './utils/implementations/auth-token-jwt.serv
 import { PrismaService } from 'src/database/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { AuthService } from './auth.service';
 
 @Module({
   controllers: [AuthController],
@@ -28,6 +29,7 @@ import { ConfigService } from '@nestjs/config';
       provide: AuthTokenService,
       useClass: AuthTokenJwtService,
     },
+    AuthService,
   ],
 })
 export class AuthModule {}

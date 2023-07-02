@@ -1,17 +1,17 @@
 import { AuthRepository } from '../auth-repository';
 import { PrismaService } from 'src/database/prisma/prisma.service';
-import { SignInBody } from 'src/auth/dtos/signin.body';
-import { SignUpBody } from 'src/auth/dtos/signup.body';
-import { AuthTokenService } from 'src/auth/utils/auth-token.service';
-import { SignUpResponse } from 'src/auth/dtos/signup.response';
-import { SignInResponse } from 'src/auth/dtos/signin.response';
+import { SignInBody } from 'src/modules/auth/dtos/signin.body';
+import { SignUpBody } from 'src/modules/auth/dtos/signup.body';
+import { AuthTokenService } from 'src/modules/auth/utils/auth-token.service';
+import { SignUpResponse } from 'src/modules/auth/dtos/signup.response';
+import { SignInResponse } from 'src/modules/auth/dtos/signin.response';
 import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { PasswordService } from 'src/auth/utils/password.service';
+import { PasswordService } from 'src/modules/auth/utils/password.service';
 import { DuplicatedFieldException } from 'src/shared/exceptions/duplicated-field.exception';
 
 @Injectable()
