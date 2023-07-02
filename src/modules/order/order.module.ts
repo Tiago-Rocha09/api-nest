@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 import { OrderRepository } from './repositories/order-repository';
-import { OrderRepositoryPrisma } from './repositories/implamantations/order-repository-prisma.service';
+import { OrderRepositoryPrisma } from './repositories/implemantations/order-repository-prisma.service';
 import { PrismaService } from 'src/database/prisma/prisma.service';
 import { PlanRepository } from '../plan/repositories/plan-repository';
 import { PlanRepositoryPrisma } from '../plan/repositories/implementations/plan-repository-prisma.service';
